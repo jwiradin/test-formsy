@@ -6,12 +6,27 @@ import GBInput from '../classes/GBInput';
 class MyPlayer extends React.Component{
     constructor(props){
         super(props);
-        
-        this.state ={
-            user: { name: "Zorro",birthyear:"1880"},
-        };
 
-        this.myComponent = [
+        this.myData = {
+            components: [{ 
+                name: "name",
+                label: "User Name",
+                placeholder : "Please enter User Name",
+                type: "text"
+                },{
+                    name: "birthyear",
+                    label: "Birth Year",
+                    placeholder : "Please enter Birth Year",
+                    type: "number"
+                },
+            ],
+            values : {
+                name:"Zorro",
+                birthyear: 0
+                }
+            };
+
+/*        this.myComponent = [
             { 
                 name: "name",
                 label: "User Name",
@@ -25,10 +40,19 @@ class MyPlayer extends React.Component{
                 type: "number"
             },
         ];
+*/
+        this.myComponent = this.myData.components;
+        const user = this.myData.values;
+
+        this.state ={
+            user
+        };
+
+        console.log(this.state.user);
+
         this.validation = this.getDefaultValidation(this.state.user);
         this.submit = this.submit.bind(this);
         this.handleChildChange = this.handleChildChange.bind(this);
-        //this.mySetState = this.mySetState.bind(this);
         this.schema = Joi.object().options({abortEarly:false}).keys({
             name: Joi.string().alphanum().min(3).max(30).required().label("User Name"),
             password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
@@ -36,6 +60,7 @@ class MyPlayer extends React.Component{
             birthyear: Joi.number().integer().min(1900).max(2013).label("Birth Year"),
             email: Joi.string().email({ minDomainAtoms: 2 })
         }).with('name', 'birthyear').without('password', 'access_token');
+
         //console.log(Joi.validate({name:'abc',birthyear:1994},this.schema));
         //var result = Joi.validate({username:'abc',birthyear:1994},schema);
 
@@ -63,28 +88,7 @@ class MyPlayer extends React.Component{
             <GBInput {...attrs} />
         )
     }
-/*
-    validate(val, callBack){
-        Joi.validate(val, this.schema, (err,value)=>{
 
-            let validation = this.getDefaultValidation(val);
-            validation.disabled = false;
-            
-            if(err){
-                validation.disabled = true;
-                err.details.forEach((detail)=>{
-                    validation[detail.path[0]].valid = false;
-                    validation[detail.path[0]].message = detail.message;
-                })
-            }
-            this.validation=validation;
-
-            if(callBack && typeof callBack === 'function'){
-                callBack(val);
-            };
-        });
-    }
-*/
     validate(val){
         let validation = this.getDefaultValidation(val);
         validation.disabled = false;
@@ -101,11 +105,7 @@ class MyPlayer extends React.Component{
 
         this.validation=validation;
     }
-/*
-    mySetState(val){
-        this.setState({val});
-    }
-*/
+
     handleChildChange(val){
         let user = Object.assign({}, this.state.user);
         let key = Object.keys(val);
@@ -115,29 +115,6 @@ class MyPlayer extends React.Component{
         this.setState({user});
     }
 
-/*        
-    handleChildChange(val){
-        let user = Object.assign({}, this.state.user);
-        let key = Object.keys(val);
-        user[key[0]] = val[key[0]];
-
-        Joi.validate(user, this.schema, (err,value)=>{
-
-            let validation = this.getDefaultValidation(user);
-            validation.disabled = false;
-            
-            if(err){
-                validation.disabled = true;
-                err.details.forEach((detail)=>{
-                    validation[detail.path[0]].valid = false;
-                    validation[detail.path[0]].message = detail.message;
-                })
-            }
-            this.validation=validation;
-            this.setState({user});
-        });
-    }
-*/
     submit(e) {
         alert('MyPlayer' + JSON.stringify(this.state.user, null , 4));
         e.preventDefault();
