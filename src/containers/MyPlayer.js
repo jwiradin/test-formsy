@@ -26,29 +26,12 @@ class MyPlayer extends React.Component{
                 }
             };
 
-/*        this.myComponent = [
-            { 
-                name: "name",
-                label: "User Name",
-                placeholder : "Please enter User Name",
-                type: "text"
-            },
-            {
-                name: "birthyear",
-                label: "Birth Year",
-                placeholder : "Please enter Birth Year",
-                type: "number"
-            },
-        ];
-*/
         this.myComponent = this.myData.components;
         const user = this.myData.values;
 
         this.state ={
             user
         };
-
-        console.log(this.state.user);
 
         this.validation = this.getDefaultValidation(this.state.user);
         this.submit = this.submit.bind(this);
@@ -61,7 +44,7 @@ class MyPlayer extends React.Component{
             email: Joi.string().email({ minDomainAtoms: 2 })
         }).with('name', 'birthyear').without('password', 'access_token');
 
-        //console.log(Joi.validate({name:'abc',birthyear:1994},this.schema));
+        console.log(Joi.validate({name:'abc'},this.schema));
         //var result = Joi.validate({username:'abc',birthyear:1994},schema);
 
         this.validate(this.state.user);
